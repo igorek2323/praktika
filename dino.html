@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра Динозавр</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            background-image: url(https://img.pikbest.com/backgrounds/20200527/retro-cyberpunk-style-80s-game-scene-pixel-art-8-bit-sci-fi-background-v_1772422jpg!w700wp);
+            background-size: cover;
+        }
+        #gameContainer {
+            width: 600px;
+            height: 200px;
+            border: 2px solid #000;
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+        #bestScore{
+            font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 5px;
+        }
+        #score {
+            font-size: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 10px;
+        }
+        
+        #dino {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+            background-image: url(https://thecode.media/wp-content/uploads/2024/05/trex.png);
+            height: 60px;
+            width: 60px;
+            background-size: cover;
+            
+        }
+        #cactus {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 160px;
+        left: 500px;
+        background-image: url(https://thecode.media/wp-content/uploads/2024/05/cactus.png); 
+        background-size: 40px 40px;
+        
+        animation: block 2s infinite linear; 
+        }
+        @keyframes block {
+    from 0%{
+      left: 500px;
+    }
+    100% {
+      left: -20px;
+    } 
+  }
+    
+    </style>
+    </head>
+    <body> 
+    <h1 style="color: #ffffff;"> Игра Динозавр</h1>
+    <div style="color: #ffffff;" id="score">Счет: 0</div>
+    <div style="color: #ffffff;" id="bestScore">Лучший результат: 0</div> 
+    <div id="gameContainer">
+        <link rel="stylesheet" href="dinoooo/main.css">
+        <div id="dino"></div>
+    <div id="cactus"></div>
+    </div>
+
+
+
+    <script>
+        let score = 0;
+        let bestScore = 0;
+        let dino = document.getElementById('dino');
+        let gameContainer = document.getElementById('gameContainer');
+        let scoreDisplay = document.getElementById('score');
+        let bestScoreDisplay = document.getElementById('bestScore'); 
+        let isJumping = false;
+        let isGameOver = false; 
+
+        function jump() {
+            if (isJumping) return;
+            isJumping = true;
+            let jumpHeight = 0;
+            let jumpInterval = setInterval(() => {
+                if (jumpHeight >= 100) {
+                    clearInterval(jumpInterval);
+                    let fallInterval = setInterval(() => {
+                        if (jumpHeight <= 0) {
+                            clearInterval(fallInterval);
+                            isJumping = false;
+                        }
+                        jumpHeight -= 5;
+                        dino.style.bottom = jumpHeight + 'px';
+                    }, 20);
+                }
+                jumpHeight += 5;
+                dino.style.bottom = jumpHeight + 'px';
+            }, 20);
+        }
+
+        function updateScore() {
+            score++;
+            scoreDisplay.innerText = 'Счет: ' + score;
+            if (score > bestScore) {
+                bestScore = score; 
+                bestScoreDisplay.innerText = 'Лучший результат: ' + bestScore;
+            }
+            
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                jump();
+            }
+        });
+
+
+        setInterval(updateScore, 1000); 
+        const cactus = document.getElementById("cactus");
+        let isAlive = setInterval(function () {
+        let dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"));
+        let cactusLeft = parseInt(window.getComputedStyle(cactus).getPropertyValue("left"));
+        if (cactusLeft < 50 && cactusLeft > 0 && dinoTop >= 140) {
+        alert("Игра окончена!");
+        score = 0
+        }
+        }, 10)
+        score = 0
+    </script>
+
+</body>
+</html>
+
